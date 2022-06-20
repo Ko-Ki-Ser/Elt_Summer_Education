@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include "phone_book_func.h"
 
+#define SIZE_BOOK 1000
+
+// Массив структур типа Str_On_Book, т.е. сама книга
+Str_On_Book phone_book [SIZE_BOOK];
 
 int main (void){
 	
@@ -17,10 +21,10 @@ WARNING! If your choice is create new book it will destroy the existing book in 
 	scanf("%hhu", &the_first_choice);
 	
 	if (the_first_choice == 1){
-		create_new_empty_book("phone_book_storage");
+		create_new_empty_book(phone_book, SIZE_BOOK,"phone_book_storage");
 	} 
 		else if (the_first_choice == 2){
-			load_book_from_storage("phone_book_storage");
+			load_book_from_storage(phone_book, SIZE_BOOK,"phone_book_storage");
 		}
 			else {
 				system("clear");
@@ -48,22 +52,22 @@ WARNING! If your choice is create new book it will destroy the existing book in 
 
 			case 1:
 				system("clear");
-				add_new_string_to_book("phone_book_storage");
+				add_new_string_to_book(phone_book, SIZE_BOOK,"phone_book_storage");
 				break;
 
 			case 2:
 				system("clear");
-				remove_string_from_book("phone_book_storage");
+				remove_string_from_book(phone_book, SIZE_BOOK,"phone_book_storage");
 				goto TryAgainTheFinalChoice;
 
 			case 3:
 				system("clear");
-				output_book_onDisplay();
+				output_book_onDisplay(phone_book, SIZE_BOOK);
 				goto TryAgainTheFinalChoice;
 				
 			case 4:
 				system("clear");
-				search_string_with_lastname();
+				search_string_with_lastname(phone_book, SIZE_BOOK);
 				goto TryAgainTheFinalChoice;
 
 			default:

@@ -4,12 +4,12 @@
 #include <string.h>
 
 
-void create_new_empty_book (const char* phone_book_storage){
+void create_new_empty_book (Str_On_Book* ptr_to_book, int size_book, const char* phone_book_storage){
 	
 	FILE* storage = fopen(phone_book_storage, "wb");
 
 	if (storage) {
-		fwrite(&phone_book, sizeof(phone_book), 1, storage);
+		fwrite(ptr_to_book, sizeof(Str_On_Book)*size_book, 1, storage);
 	} 	
 		else {
 			printf("Create new book failed");
@@ -19,12 +19,12 @@ void create_new_empty_book (const char* phone_book_storage){
 	fclose(storage);
 }
 
-void load_book_from_storage (const char* phone_book_storage){
+void load_book_from_storage (Str_On_Book* ptr_to_book, int size_book, const char* phone_book_storage){
 	
 	FILE* storage = fopen(phone_book_storage, "rb");
 
 	if (storage) {
-		fread(&phone_book, sizeof(phone_book), 1, storage);
+		fread(ptr_to_book, sizeof(Str_On_Book)*size_book, 1, storage);
 	} 	
 		else {
 			printf("Load book from storage failed");
@@ -34,15 +34,15 @@ void load_book_from_storage (const char* phone_book_storage){
 	fclose(storage);
 }
 
-void add_new_string_to_book(const char* phone_book_storage){
+void add_new_string_to_book(Str_On_Book* ptr_to_book, int size_book, const char* phone_book_storage){
 
 
 	// Поиск свободной структуры в массиве по флажку
 	unsigned short index_for_add;
 	
-	for (int i = 0; i < SIZE_BOOK; i++){
+	for (int i = 0; i < size_book; i++){
 		
-		if (phone_book[i].flag == 0){
+		if (ptr_to_book[i].flag == 0){
 			index_for_add = i;
 			break;
 		}
@@ -50,13 +50,13 @@ void add_new_string_to_book(const char* phone_book_storage){
 
 	// Добавление записи в книгу
 	printf("Founded a free page in a book # %d , please, enter the lastname\n", index_for_add);
-	scanf("%s", phone_book[index_for_add].last_name);
+	scanf("%s", ptr_to_book[index_for_add].last_name);
 	printf("Enter the first name\n");
-	scanf("%s", phone_book[index_for_add].first_name);
+	scanf("%s", ptr_to_book[index_for_add].first_name);
 	printf("Enter the phone number\n");
-	scanf("%s", phone_book[index_for_add].phone_number);
+	scanf("%s", ptr_to_book[index_for_add].phone_number);
 
-	phone_book[index_for_add].flag = 1;
+	ptr_to_book[index_for_add].flag = 1;
 
 	printf("Thank you, string added to book\n");
 	
@@ -65,7 +65,7 @@ void add_new_string_to_book(const char* phone_book_storage){
 	FILE* storage = fopen(phone_book_storage, "wb");
 
 	if (storage) {
-		fwrite(&phone_book, sizeof(phone_book), 1, storage);
+		fwrite(ptr_to_book, sizeof(Str_On_Book)*size_book, 1, storage);
 	} 	
 		else {
 			printf("Open storage is failed");
@@ -75,15 +75,15 @@ void add_new_string_to_book(const char* phone_book_storage){
 	fclose(storage);
 }
 
-void output_book_onDisplay(){
+void output_book_onDisplay(Str_On_Book* ptr_to_book, int size_book){
 
 	unsigned short count_string_out = 0;
 
-	for (int i = 0; i < SIZE_BOOK; i++){
+	for (int i = 0; i < size_book; i++){
 		
-		if (phone_book[i].flag == 1){
+		if (ptr_to_book[i].flag == 1){
 			
-			printf("   Last name: %s\n  First name: %s\nPhone number: %s\n\n", phone_book[i].last_name, phone_book[i].first_name, phone_book[i].phone_number);
+			printf("   Last name: %s\n  First name: %s\nPhone number: %s\n\n", ptr_to_book[i].last_name, ptr_to_book[i].first_name, ptr_to_book[i].phone_number);
 			count_string_out++;
 		}
 	}
@@ -95,7 +95,7 @@ void output_book_onDisplay(){
 
 }
 
-void remove_string_from_book(const char* phone_book_storage){
+void remove_string_from_book(Str_On_Book* ptr_to_book, int size_book, const char* phone_book_storage){
 
 	unsigned short count_string_remove = 0;
 	char lastname [30];
@@ -103,9 +103,9 @@ void remove_string_from_book(const char* phone_book_storage){
 	printf("Enter the lastname for remove\n");
 	scanf("%s", lastname);
 
-	for (int i = 0; i < SIZE_BOOK; i++){
-		if(strcmp(lastname, phone_book[i].last_name) == 0){
-			phone_book[i].flag = 0;
+	for (int i = 0; i < size_book; i++){
+		if(strcmp(lastname, ptr_to_book[i].last_name) == 0){
+			ptr_to_book[i].flag = 0;
 			count_string_remove++;
 		}
 	}
@@ -121,7 +121,7 @@ void remove_string_from_book(const char* phone_book_storage){
 	FILE* storage = fopen(phone_book_storage, "wb");
 
 	if (storage) {
-		fwrite(&phone_book, sizeof(phone_book), 1, storage);
+		fwrite(ptr_to_book, sizeof(Str_On_Book)*size_book, 1, storage);
 	} 	
 		else {
 			printf("Open storage is failed");
@@ -131,7 +131,7 @@ void remove_string_from_book(const char* phone_book_storage){
 	fclose(storage);
 }
 
-void search_string_with_lastname (){
+void search_string_with_lastname (Str_On_Book* ptr_to_book, int size_book){
 
 	unsigned short count_string_search = 0;
 	char lastname [30];
@@ -139,9 +139,9 @@ void search_string_with_lastname (){
 	printf("Enter the lastname for search\n");
 	scanf("%s", lastname);
 
-	for (int i = 0; i < SIZE_BOOK; i++){
-		if(strcmp(lastname, phone_book[i].last_name) == 0){
-			printf("   Last name: %s\n  First name: %s\nPhone number: %s\n\n", phone_book[i].last_name, phone_book[i].first_name, phone_book[i].phone_number);;
+	for (int i = 0; i < size_book; i++){
+		if(strcmp(lastname, ptr_to_book[i].last_name) == 0){
+			printf("   Last name: %s\n  First name: %s\nPhone number: %s\n\n", ptr_to_book[i].last_name, ptr_to_book[i].first_name, ptr_to_book[i].phone_number);;
 			count_string_search++;
 		}
 	}
