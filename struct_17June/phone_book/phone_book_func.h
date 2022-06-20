@@ -15,8 +15,8 @@ typedef struct string_on_book {
 } Str_On_Book;
 
 
-// Создание новой книги и запись её в файл для дальнейшей работы
-void create_new_empty_book (Str_On_Book* ptr_to_book, int size_book, const char* phone_book_storage); 
+// Создание новой книги на 5 структур и запись её в файл для дальнейшей работы
+void create_new_empty_book (Str_On_Book* ptr_to_book, const char* phone_book_storage); 
 
 // Загрузка существующей книги из файла
 void load_book_from_storage (Str_On_Book* ptr_to_book, int size_book, const char* phone_book_storage); 
@@ -32,5 +32,11 @@ void output_book_onDisplay (Str_On_Book* ptr_to_book, int size_book);
 
 // Поиск записи в книге по фамилии
 void search_string_with_lastname (Str_On_Book* ptr_to_book, int size_book);
+
+// Перевыделение памяти
+Str_On_Book* memory_reallocation (Str_On_Book* ptr_to_old_book, int* ptr_to_sizeofbook,const char* phone_book_storage);
+
+// Для определения размера файла
+int FileSize(const char* file_name);
 
 #endif

@@ -2,12 +2,16 @@
 #include <stdlib.h>
 #include "phone_book_func.h"
 
-#define SIZE_BOOK 1000
 
-// Массив структур типа Str_On_Book, т.е. сама книга
-Str_On_Book phone_book [SIZE_BOOK];
+int main (int argc, char ** argv){
 
-int main (void){
+
+	// Определение необходимого для работы размера телефонной книги и указателя на  этот размер
+	int size_of_book = (FileSize(argv[1]) / 91) + 5; // Кол-во структур в файле
+	int* ptr_to_sizeofbook = &size_of_book;
+	
+	// Выделение памяти для загрузки массива структур из файла
+	Str_On_Book* phone_book = calloc(size_of_book, sizeof(Str_On_Book));
 	
 	system("clear");
 	
@@ -17,14 +21,14 @@ int main (void){
 WARNING! If your choice is create new book it will destroy the existing book in file!\n");
 	
 	unsigned char the_first_choice;
-	
+printf("%d\n\n",size_of_book);
 	scanf("%hhu", &the_first_choice);
 	
 	if (the_first_choice == 1){
-		create_new_empty_book(phone_book, SIZE_BOOK,"phone_book_storage");
+		create_new_empty_book(phone_book, argv[1]);
 	} 
 		else if (the_first_choice == 2){
-			load_book_from_storage(phone_book, SIZE_BOOK,"phone_book_storage");
+			load_book_from_storage(phone_book, size_of_book, argv[1]);
 		}
 			else {
 				system("clear");
@@ -33,6 +37,20 @@ WARNING! If your choice is create new book it will destroy the existing book in 
 			}
 
 	while(1){
+		
+		// Подсчет кол-ва занятых записей
+		unsigned int count_of_using_strings = 0;
+		
+		for (int i = 0; i < size_of_book; i++){
+			if (phone_book[i].flag == 1){
+				count_of_using_strings++;
+			}
+		}
+
+		// Если место заканчивается перевыделяем память
+		if ((count_of_using_strings + 1) == size_of_book){
+			Str_On_Book* phone_book = memory_reallocation(phone_book, ptr_to_sizeofbook, argv[1]);
+		}
 		
 		system("clear");
 
@@ -46,28 +64,30 @@ WARNING! If your choice is create new book it will destroy the existing book in 
 
 		unsigned char the_second_choice;
 
+			printf("%d\n\n",size_of_book);
+
 		scanf("%hhu", &the_second_choice);
 		
 		switch (the_second_choice) {
 
 			case 1:
 				system("clear");
-				add_new_string_to_book(phone_book, SIZE_BOOK,"phone_book_storage");
-				break;
+				add_new_string_to_book(phone_book, size_of_book, argv[1]);
+				goto TryAgainTheFinalChoice;
 
 			case 2:
 				system("clear");
-				remove_string_from_book(phone_book, SIZE_BOOK,"phone_book_storage");
+				remove_string_from_book(phone_book, size_of_book, argv[1]);
 				goto TryAgainTheFinalChoice;
 
 			case 3:
 				system("clear");
-				output_book_onDisplay(phone_book, SIZE_BOOK);
+				output_book_onDisplay(phone_book, size_of_book);
 				goto TryAgainTheFinalChoice;
 				
 			case 4:
 				system("clear");
-				search_string_with_lastname(phone_book, SIZE_BOOK);
+				search_string_with_lastname(phone_book, size_of_book);
 				goto TryAgainTheFinalChoice;
 
 			default:
