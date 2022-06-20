@@ -2,14 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <stddef.h>
 
 
-void create_new_empty_book (Str_On_Book* ptr_to_book, int size_book, const char* phone_book_storage){
+void create_new_empty_book (Str_On_Book* ptr_to_book, const char* phone_book_storage){
 	
 	FILE* storage = fopen(phone_book_storage, "wb");
 
 	if (storage) {
-		fwrite(ptr_to_book, sizeof(Str_On_Book)*size_book, 1, storage);
+		fwrite(ptr_to_book, sizeof(Str_On_Book)*5, 1, storage);
 	} 	
 		else {
 			printf("Create new book failed");
@@ -152,4 +156,38 @@ void search_string_with_lastname (Str_On_Book* ptr_to_book, int size_book){
 			printf("Number of strings found - %d\n", count_string_search);
 		}
 
+}
+
+Str_On_Book* memory_reallocation (Str_On_Book* ptr_to_old_book, int* ptr_to_sizeofbook,const char* phone_book_storage){
+
+	Str_On_Book* res = (Str_On_Book*)realloc(ptr_to_old_book, (sizeof(Str_On_Book) * ((*ptr_to_sizeofbook) + 10)));
+	*ptr_to_sizeofbook = (*ptr_to_sizeofbook) + 10;
+
+	if(res != NULL){
+		return res;
+	} 
+		else {
+			printf ("Error memory_reallocation!!!");
+			exit(EXIT_FAILURE);
+		}
+}
+
+
+int FileSize(const char* file_name){
+	int file_size = 0;
+	struct stat fileStatbuff;
+	int fd = open(file_name, O_RDONLY);
+	if(fd == -1){
+		file_size = -1;
+	}
+	else{
+		if ((fstat(fd, &fileStatbuff) != 0) || (!S_ISREG(fileStatbuff.st_mode))) {
+			file_size = -1;
+		}
+		else{
+			file_size = fileStatbuff.st_size;
+		}
+		close(fd);
+	}
+	return file_size;
 }
