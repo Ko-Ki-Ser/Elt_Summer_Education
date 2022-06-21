@@ -53,12 +53,12 @@ void add_new_string_to_book(Str_On_Book* ptr_to_book, int size_book, const char*
 	}
 
 	// Добавление записи в книгу
-	printf("Founded a free page in a book # %d , please, enter the lastname\n", index_for_add);
-	scanf("%s", ptr_to_book[index_for_add].last_name);
-	printf("Enter the first name\n");
-	scanf("%s", ptr_to_book[index_for_add].first_name);
-	printf("Enter the phone number\n");
-	scanf("%s", ptr_to_book[index_for_add].phone_number);
+	printf("Founded a free page in a book # %d , please, enter the lastname(max 29symbols)\n", index_for_add);
+	scanf("%29s", ptr_to_book[index_for_add].last_name);
+	printf("Enter the first name(max 29symbols)\n");
+	scanf("%29s", ptr_to_book[index_for_add].first_name);
+	printf("Enter the phone number(max 29symbols)\n");
+	scanf("%29s", ptr_to_book[index_for_add].phone_number);
 
 	ptr_to_book[index_for_add].flag = 1;
 

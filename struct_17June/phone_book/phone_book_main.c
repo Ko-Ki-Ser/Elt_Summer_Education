@@ -7,7 +7,7 @@ int main (int argc, char ** argv){
 
 
 	// Определение необходимого для работы размера телефонной книги и указателя на  этот размер
-	int size_of_book = (FileSize(argv[1]) / 91) + 5; // Кол-во структур в файле
+	int size_of_book = (FileSize(argv[1]) / 91) + 5; // Кол-во структур в файле +5
 	int* ptr_to_sizeofbook = &size_of_book;
 	
 	// Выделение памяти для загрузки массива структур из файла
@@ -21,7 +21,7 @@ int main (int argc, char ** argv){
 WARNING! If your choice is create new book it will destroy the existing book in file!\n");
 	
 	unsigned char the_first_choice;
-printf("%d\n\n",size_of_book);
+
 	scanf("%hhu", &the_first_choice);
 	
 	if (the_first_choice == 1){
@@ -63,9 +63,7 @@ printf("%d\n\n",size_of_book);
 		[4] - Search in book with lastname\n");
 
 		unsigned char the_second_choice;
-
-			printf("%d\n\n",size_of_book);
-
+		
 		scanf("%hhu", &the_second_choice);
 		
 		switch (the_second_choice) {
@@ -122,5 +120,6 @@ printf("%d\n\n",size_of_book);
 	
 	}
 
+	free(phone_book);
 	return 0;
 }
