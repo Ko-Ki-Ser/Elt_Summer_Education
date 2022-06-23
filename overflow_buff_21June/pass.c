@@ -2,11 +2,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define DEBUG
+
 int IsPassOk(void);
 
 int main(void)
 {
     int PwStatus;
+
+#ifdef DEBUG
+printf("&main = %p, &IsPassOk = %p\n\n", &main, &IsPassOk);
+#endif
 
     puts("Enter password:");
     PwStatus = IsPassOk();

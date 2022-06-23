@@ -17,7 +17,8 @@ int main(){
 	printf("%p\n\n%p\n\n", ptr_to_int, ptr_to_char); 
 	
 	// вывод значений каждого байта int a
-	printf("%d\t%d\t%d\t%d\t%d\t\n", *ptr_to_int, *ptr_to_char,*(ptr_to_char + 1), *(ptr_to_char + 2), *(ptr_to_char + 3)); 
+	printf("%d\t%d\t%d\t%d\t%d\t\n", *ptr_to_int, *ptr_to_char, \
+*(ptr_to_char + 1), *(ptr_to_char + 2), *(ptr_to_char + 3)); 
 	
 	// изменение значения 3ого байта int a
 	char* ptr_one = ptr_to_char + 2; 

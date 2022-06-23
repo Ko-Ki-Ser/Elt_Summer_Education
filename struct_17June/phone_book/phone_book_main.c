@@ -6,8 +6,9 @@
 int main (int argc, char ** argv){
 
 
-	// Определение необходимого для работы размера телефонной книги и указателя на  этот размер
-	int size_of_book = (FileSize(argv[1]) / 91) + 5; // Кол-во структур в файле +5
+	/* Определение необходимого для работы размера телефонной книги и указателя
+	на  этот размер */
+ 	int size_of_book = (FileSize(argv[1]) / (STR_SIZE*3)) + MEM_SIZE; 
 	int* ptr_to_sizeofbook = &size_of_book;
 	
 	// Выделение памяти для загрузки массива структур из файла
@@ -18,7 +19,8 @@ int main (int argc, char ** argv){
 	TryAgainTheFirstChoice:
 	
 	printf("Create new empty book [1] or load book from storage [2] ?\n\
-WARNING! If your choice is create new book it will destroy the existing book in file!\n");
+WARNING! If your choice is create new book it will destroy the existing book in \
+file!\n");
 	
 	unsigned char the_first_choice;
 
