@@ -30,7 +30,7 @@ printf("&main = %p, &IsPassOk = %p\n\n", &main, &IsPassOk);
 int IsPassOk(void)
 {
     char Pass[12];
-
+    
     gets(Pass);
 
     return 0 == strcmp(Pass, "test");

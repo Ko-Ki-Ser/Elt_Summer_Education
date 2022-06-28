@@ -1,23 +1,20 @@
-all: one two two_bug.s two_bug three four four_2
+all: one.out two.out three.out four.out four_2.out
 
 
-one: one.c 
-	gcc -o one one.c
+one.out: one.c 
+	gcc -o one.out one.c
 
-two: two.c
-	gcc -o two two.c
+two.out: two.c
+	gcc -o two.out two.c
 
-two_bug.s: two_bug.c
-	gcc -S two_bug.c
+three.out: three.c
+	gcc -o three.out three.c
 
-two_bug: two_bug.s
-	gcc -o two_bug two_bug.s
+four.out: four.c
+	gcc -o four.out four.c
 
-three: three.c
-	gcc -o three three.c
+four_2.out: four_2.c
+	gcc -o four_2.out four_2.c
 
-four: four.c
-	gcc -o four four.c
-
-four_2: four_2.c
-	gcc -o four_2 four_2.c
+clean:
+	-rm one.out two.out three.out four.out four_2.out
