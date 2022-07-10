@@ -1,7 +1,13 @@
 all: t_e.out 
 
-t_e.out: text_ed.c 
-	gcc -o t_e.out text_ed.c -lncurses -g
+text_ed.o: text_ed.c
+	gcc text_ed.c -c
+
+text_edit_func.o: text_edit_func.c
+	gcc text_edit_func.c -c
+
+t_e.out: text_ed.o text_edit_func.o
+	gcc -o t_e.out text_ed.o text_edit_func.o -lncurses -g
 
 clean:
-	-rm t_e.out 
+	-rm t_e.out text_ed.o text_edit_func.o
