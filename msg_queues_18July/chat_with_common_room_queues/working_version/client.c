@@ -63,7 +63,7 @@ char id_client[ID_CLIENT_SIZE];
 char msg_scanf [Q_SIZE];
 int scanf_flag = 0;
 
-// argv[1]- номер для отпределения очередей
+// argv[1]- номер для определения очередей
 // argv[2]- id клиента (Name: )
 int main (int argc, char** argv) {
 
@@ -185,7 +185,7 @@ int main (int argc, char** argv) {
 	}
 }
 
-// для потока ввода, отправляет сообщения в очередь
+// отправляет сообщения в очередь
 void* func_thread_send (void* arg) {
 
 	char msg_buff_send [Q_SIZE];	
