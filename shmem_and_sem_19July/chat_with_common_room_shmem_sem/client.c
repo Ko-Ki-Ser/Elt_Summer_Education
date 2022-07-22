@@ -65,7 +65,7 @@ int main_while_var = 1;
 char id_client[ID_CLIENT_SIZE];
 
 // для ввода с клавиатуры
-char msg_scanf [MSG_BUFF_SIZE];
+char msg_scanf [MSG_BUFF_SIZE - ID_CLIENT_SIZE];
 int scanf_flag = 0;
 
 // номера для участков памяти
@@ -314,10 +314,10 @@ void* func_thread_send (void* arg) {
 			// критическая секция
 			if (sem_trywait(sem_out) == 0) {
 
-				strcpy(msg, id_client);
+				memcpy(msg, id_client, sizeof(id_client));
 				strcat(msg, msg_scanf);
 
-				memcpy(msg_out->msg_buff, msg, strlen(msg_scanf));
+				memcpy(msg_out->msg_buff, msg, sizeof(msg_scanf));
 				msg_out->flag = 1;
 				memcpy(shmem_ptr_out, msg_out, sizeof(struct_msg_client));
 				scanf_flag = 0;

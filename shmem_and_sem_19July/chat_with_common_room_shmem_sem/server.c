@@ -302,7 +302,7 @@ void* func_thread_client (void* arg){
 		// обработка входящих		 
 		// блокировка семафора для своего входящего участка памяти
 		// критическая секция
-		if (sem_trywait(sems[num_in]) == 0) {
+		sem_wait(sems[num_in]); 
 		// вытаскиваем структуру из участка общей памяти
 		memcpy(msg_from_cli[*arg_num], shmem_ptr[num_in],\
 			   sizeof(struct_msg_client));
@@ -310,57 +310,54 @@ void* func_thread_client (void* arg){
 		// конец критической секции
 		sem_post(sems[num_in]);		
 
-			// проверяем поле msg_buff, если там "connect"
-			// то подключаем (pid берем из поля структуры flag)
-			if (strncmp(msg_from_cli[*arg_num]->msg_buff, MSG_CONNECT, CON_COUNT) == 0) {
-				if(clients_info[*(arg_num)].flag_connect == 0) {
-					clients_info[*(arg_num)].client_pid = msg_from_cli[*arg_num]->flag;
-					clients_info[*(arg_num)].flag_connect = 1;
-					clients_connected_count++;
-				}
+		// проверяем поле msg_buff, если там "connect"
+		// то подключаем (pid берем из поля структуры flag)
+		if (strncmp(msg_from_cli[*arg_num]->msg_buff, MSG_CONNECT, CON_COUNT) == 0) {
+			if(clients_info[*(arg_num)].flag_connect == 0) {
+				clients_info[*(arg_num)].client_pid = msg_from_cli[*arg_num]->flag;
+				clients_info[*(arg_num)].flag_connect = 1;
+				clients_connected_count++;
 			}
+		}
 
-			// если там "disconnect", то отключаем
-			else if ((strncmp(msg_from_cli[*arg_num]->msg_buff, MSG_DISCONNECT,\
+		// если там "disconnect", то отключаем
+		else if ((strncmp(msg_from_cli[*arg_num]->msg_buff, MSG_DISCONNECT,\
 							 DISCON_COUNT)) == 0 && (clients_info[*(arg_num)].flag_connect == 1)) {
-				
-				clients_info[*(arg_num)].client_pid = 0;
-				clients_info[*(arg_num)].flag_connect = 0;
-				clients_connected_count--;								
-			}
+			clients_info[*(arg_num)].client_pid = 0;
+			clients_info[*(arg_num)].flag_connect = 0;
+			clients_connected_count--;								
+		}
 
-			// в других случаях обрабатываем как входящее сообщение
-			else {
+		// в других случаях обрабатываем как входящее сообщение
+		else {
 				
-				// если поле flag = 1, то сообщение новое- подлежит обработке
-				if ((msg_from_cli[*arg_num]->flag == 1) && (clients_info[*(arg_num)].flag_connect == 1)) {
+			// если поле flag = 1, то сообщение новое- подлежит обработке
+			if ((msg_from_cli[*arg_num]->flag == 1) && (clients_info[*(arg_num)].flag_connect == 1)) {
 					
-					printf("%s\n", msg_from_cli[*arg_num]->msg_buff);
+				printf("%s\n", msg_from_cli[*arg_num]->msg_buff);
 
-					// кладем вх. структурку в исх.
-					memcpy(msg_to_cli[*arg_num], msg_from_cli[*arg_num],\
+				// кладем вх. структурку в исх.
+				memcpy(msg_to_cli[*arg_num], msg_from_cli[*arg_num],\
 						   sizeof(struct_msg_client));														
-				}
-			}									
-		}		
+			}
+		}				
 		
 		// обработка исходящих
 		// если поле flag = 1, то сообщение подлежит обработке
-		if ((msg_from_cli[*arg_num]->flag == 1) && (clients_info[*(arg_num)].flag_connect == 1)){
+		if ((msg_from_cli[*arg_num]->flag == 1) && (clients_info[*(arg_num)].flag_connect == 1)) {
 
 			msg_from_cli[*arg_num]->flag = 0;
 			for (int i = 1; i < max_clients * 2; i = i + 2) {
 				// критическая секция		
-				if (sem_trywait(sems[i]) == 0) {			
-					if (i != num_out) {
-						// кладем структурку в общую память
-						memcpy(shmem_ptr[i], msg_to_cli[*arg_num],\
-					  		   sizeof(struct_msg_client));						
+				sem_trywait(sems[i]);			
+				if (i != num_out) {
+					// кладем структурку в общую память
+					memcpy(shmem_ptr[i], msg_to_cli[*arg_num],\
+				  		   sizeof(struct_msg_client));						
 					}
 				sem_post(sems[i]);				
-				}
-			}			
-		}
+			}
+		}	
 		memset(msg_from_cli[*arg_num], 0, sizeof(struct_msg_client));
 	}
 	pthread_exit(NULL);
