@@ -7,7 +7,8 @@
 #include <sys/un.h>
 #include <string.h>
 
-#define MY_SOCK_PATH "sockspath"
+#define MY_SOCK_PATH_SERV "sockspathserv"
+#define MY_SOCK_PATH_CLI "sockspathcli"
 #define BUFF_SIZE 128
 #define CLIENT_MSG " Hello, I'am client!"
 
@@ -16,7 +17,9 @@ int main (void) {
 	// переменные для работы
 	int fd_client;
 	struct sockaddr_un addr_un_server;
+	struct sockaddr_un addr_un_client;
 	socklen_t addr_un_server_size;
+	socklen_t addr_un_client_size;
 
 	// буферы для сообщений
 	char buff_input [BUFF_SIZE];
@@ -29,15 +32,30 @@ int main (void) {
 		exit(EXIT_FAILURE);
 	}
 
-	// зануляем структуру
-	memset(&addr_un_server, 0, sizeof(struct sockaddr_in));
+	// зануляем структуры
+	memset(&addr_un_server, 0, sizeof(struct sockaddr_un));	
+	memset(&addr_un_client, 0, sizeof(struct sockaddr_un));
 
-	addr_un_server_size = sizeof(struct sockaddr_in);
+	addr_un_server_size = sizeof(struct sockaddr_un);
+	addr_un_client_size = sizeof(struct sockaddr_un);
 
 	// инициализируем поля нужными значениями
 	addr_un_server.sun_family = AF_LOCAL;
-	strncpy(addr_un_server.sun_path, MY_SOCK_PATH,\
+	strncpy(addr_un_server.sun_path, MY_SOCK_PATH_SERV,\
 			sizeof(addr_un_server.sun_path) - 1);
+	addr_un_client.sun_family = AF_LOCAL;
+	strncpy(addr_un_client.sun_path, MY_SOCK_PATH_CLI,\
+			sizeof(addr_un_client.sun_path) - 1);
+
+	// на всякий случай подстраховка для bind()
+	unlink(MY_SOCK_PATH_CLI);
+
+	// связываем адрес с сокетом
+	if (bind (fd_client, (struct sockaddr*) &addr_un_client,\
+		sizeof(struct sockaddr)) == -1 ) {
+		perror(" bind() error ");
+		exit(EXIT_FAILURE);
+	}	
 
 	// отправляем данные
 	strncpy(buff_output, CLIENT_MSG, sizeof(buff_output));
@@ -64,6 +82,7 @@ int main (void) {
 
 	// закрываем сокет и выходим
 	close(fd_client);
+	unlink(MY_SOCK_PATH_CLI);
 
 	exit(EXIT_SUCCESS);
 }

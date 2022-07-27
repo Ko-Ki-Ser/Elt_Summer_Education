@@ -8,7 +8,7 @@
 #include <string.h>
 #include <errno.h>
 
-#define MY_SOCK_PATH "sockspath"
+#define MY_SOCK_PATH "sockspathserv"
 #define BUFF_SIZE 128
 #define SERV_PART_OF_ANSWER " HELLO, I'AM SERVER!"
 
@@ -67,10 +67,7 @@ int main (void) {
 	// обрабатываем данные
 	strncpy(buff_output, buff_input, sizeof(buff_output));
 	strcat(buff_output, SERV_PART_OF_ANSWER);
-	printf("Server: send msg prepared: %s\n", buff_output);
-
-	// sendto Transport endpoint is not connected
-	// errno 107
+	printf("Server: send msg prepared: %s\n", buff_output);	
 
 	// отправляем модифицированные данные обратно клиенту
 	if (sendto(server_fd, buff_output, sizeof(buff_output), 0,\
