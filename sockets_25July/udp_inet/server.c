@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-#define MY_PORT 35555
+#define MY_PORT 35556
 #define BUFF_SIZE 128
 #define SERV_PART_OF_ANSWER " HELLO, I'AM SERVER!"
 
@@ -49,7 +49,7 @@ int main (void) {
 	sockaddr_client_size = sizeof(struct sockaddr_in);
 
 	// принимаем данные 
-	if (recvfrom(server_fd, &buff_input, sizeof(buff_input), MSG_WAITALL,
+	if (recvfrom(server_fd, &buff_input, sizeof(buff_input), 0,
 				 (struct sockaddr*) &sockaddr_client, &sockaddr_client_size) == -1) {
 		perror(" recvfrom() error ");
 		exit(EXIT_FAILURE);

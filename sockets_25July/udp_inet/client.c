@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-#define MY_SERVER_PORT 35555
+#define MY_SERVER_PORT 35556
 #define MY_SERVER_IPV4_ADDR "127.0.0.1"
 #define BUFF_SIZE 128
 #define CLIENT_MSG " Hello, I'am client!"
